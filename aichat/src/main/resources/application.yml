@@ -1,0 +1,13 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: ai-chat-service
+  config:
+    import: optional:file:application-secret.yml
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

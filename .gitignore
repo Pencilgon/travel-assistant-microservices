@@ -1,0 +1,11 @@
+# Common ignores
+*.log
+*.env
+*.iml
+.DS_Store
+.idea/
+target/
+node_modules/
+
+# Secrets
+**/application-secret.yml
