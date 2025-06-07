@@ -78,9 +78,17 @@ public class JwtGlobalFilter implements GlobalFilter, Ordered {
             return chain.filter(exchange);
         }
 
-        boolean useOldKey = RENTAL_OLD_KEY_ENDPOINTS.stream().anyMatch(requestPath::startsWith);
-        String jwtSecretToUse = useOldKey || requestPath.startsWith("/rental/")
-                ? NEW_SECRET : OLD_SECRET;
+        boolean isRentalOld = RENTAL_OLD_KEY_ENDPOINTS.stream().anyMatch(requestPath::startsWith);
+        boolean isRental = requestPath.startsWith("/rental/");
+
+        String jwtSecretToUse;
+        if (isRentalOld) {
+            jwtSecretToUse = OLD_SECRET;
+        } else if (isRental) {
+            jwtSecretToUse = NEW_SECRET;
+        } else {
+            jwtSecretToUse = OLD_SECRET;
+        }
 
         String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         logger.info("🛂 Authorization Header: {}", authHeader);

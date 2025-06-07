@@ -5,7 +5,7 @@ spring:
   application:
     name: information-service
   config:
-    import: optional:file:application-secret.yml
+    import: optional:file:src/main/resources/application-secret.yml
   datasource:
     driver-class-name: org.postgresql.Driver
   jpa:

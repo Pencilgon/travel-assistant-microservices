@@ -319,8 +319,8 @@ public class CarController {
                                          @ModelAttribute CarRequest carRequest,
                                          @RequestPart("images") List<MultipartFile> images) throws IOException {
 
-        if (carRepository.countByOwnerId(id) >= 3) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You have reached the limit of 3 cars");
+        if (carRepository.countByOwnerId(id) >= 5) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You have reached the limit of 5 cars");
         }
         if (carRequest.brand == null || carRequest.brand.isBlank()) {
             return ResponseEntity.badRequest().body("Brand is required");
@@ -337,6 +337,12 @@ public class CarController {
         if (carRequest.country == null || carRequest.country.isBlank() ||
                 carRequest.city == null || carRequest.city.isBlank()) {
             return ResponseEntity.badRequest().body("Country and city are required");
+        }
+        if (carRequest.latitude == null || carRequest.latitude < -90 || carRequest.latitude > 90) {
+            return ResponseEntity.badRequest().body("Latitude must be between -90 and 90");
+        }
+        if (carRequest.longitude == null || carRequest.longitude < -180 || carRequest.longitude > 180) {
+            return ResponseEntity.badRequest().body("Longitude must be between -180 and 180");
         }
         if (images == null || images.isEmpty()) {
             return ResponseEntity.badRequest().body("At least one image is required");
@@ -426,6 +432,89 @@ public class CarController {
                 .toList();
         return ResponseEntity.ok(response);
     }
+    @DeleteMapping("/user/{userId}/delete/car/{carId}")
+    public ResponseEntity<String> deleteCar(@PathVariable UUID userId, @PathVariable UUID carId) {
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found"));
+
+        if (!car.getOwner().getId().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not allowed to delete this car");
+        }
+
+        carRepository.delete(car);
+        return ResponseEntity.ok("Car deleted successfully");
+    }
+    @PatchMapping(value = "/user/{userId}/update/car/{carId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> patchCar(@PathVariable UUID userId,
+                                           @PathVariable UUID carId,
+                                           @ModelAttribute CarRequest carRequest,
+                                           @RequestPart(value = "images", required = false) List<MultipartFile> images) throws IOException {
+
+        Car car = carRepository.findById(carId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Car not found"));
+
+        if (!car.getOwner().getId().equals(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not allowed to edit this car");
+        }
+
+        if (carRequest.brand != null && !carRequest.brand.isBlank()) {
+            car.setBrand(carRequest.brand);
+        }
+        if (carRequest.model != null && !carRequest.model.isBlank()) {
+            car.setModel(carRequest.model);
+        }
+        if (carRequest.year != 0) {
+            if (carRequest.year > 1900 && carRequest.year <= LocalDate.now().getYear()) {
+                car.setYear(carRequest.year);
+            } else {
+                return ResponseEntity.badRequest().body("Year is invalid");
+            }
+        }
+        if (carRequest.color != null) {
+            car.setColor(carRequest.color);
+        }
+        if (carRequest.description != null) {
+            car.setDescription(carRequest.description);
+        }
+        if (carRequest.pricePerDay > 0) {
+            car.setPricePerDay(carRequest.pricePerDay);
+        }
+        if (carRequest.country != null && carRequest.city != null) {
+            if (carRequest.latitude == null || carRequest.latitude < -90 || carRequest.latitude > 90) {
+                return ResponseEntity.badRequest().body("Latitude must be between -90 and 90");
+            }
+            if (carRequest.longitude == null || carRequest.longitude < -180 || carRequest.longitude > 180) {
+                return ResponseEntity.badRequest().body("Longitude must be between -180 and 180");
+            }
+
+            Location location = locationRepository.findByCountryAndCity(carRequest.country, carRequest.city)
+                    .orElseGet(() -> {
+                        Location newLocation = new Location();
+                        newLocation.setCountry(carRequest.country);
+                        newLocation.setCity(carRequest.city);
+                        newLocation.setLatitude(carRequest.latitude);
+                        newLocation.setLongitude(carRequest.longitude);
+                        return locationRepository.save(newLocation);
+                    });
+            car.setLocation(location);
+        }
+
+        if (images != null && !images.isEmpty()) {
+            car.getImages().clear();
+            for (MultipartFile file : images) {
+                String url = cloudinaryService.uploadImage(file);
+                CarImage image = new CarImage();
+                image.setUrl(url);
+                image.setCar(car);
+                car.getImages().add(image);
+            }
+        }
+
+        carRepository.save(car);
+        return ResponseEntity.ok("Car updated successfully");
+    }
+
+
 
 
 

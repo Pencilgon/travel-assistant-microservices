@@ -5,7 +5,7 @@ spring:
   application:
     name: ai-chat-service
   config:
-    import: optional:file:application-secret.yml
+    import: optional:file:src/main/resources/application-secret.yml
 
 eureka:
   client:

@@ -4,6 +4,17 @@ This repository contains all backend microservices for the **AI-powered Smart Tr
 
 ---
 
+## 🛠 Technologies Used
+
+- Java 17
+- Spring Boot 3.x
+- Spring Cloud (Eureka, Gateway)
+- PostgreSQL
+- Auth0 (OAuth2)
+- OpenAI API (GPT-4)
+- Cloudinary (Media storage)
+- Maven
+
 ## 🧱 Microservices Overview
 
 | Service Name          | Description                                                                 |
@@ -21,8 +32,17 @@ This repository contains all backend microservices for the **AI-powered Smart Tr
 
 ## 🚀 Getting Started
 
-### 1. Clone the repository
+### Clone the repository
 
 ```bash
 git clone https://github.com/yourname/travel-assistant-microservices.git
 cd travel-assistant-microservices
+```
+
+### Configuration
+
+Each microservice requires an `application-secret.yml` file to be present in its `resources/` directory.  
+This file contains sensitive information (like database credentials and API keys).
+
+To help you get started, each service includes a template file:  
+`application-secret.example.yml`
