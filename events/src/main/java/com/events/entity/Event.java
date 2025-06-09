@@ -2,7 +2,7 @@ package com.events.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -15,23 +15,17 @@ public class Event {
 
     private String title;
     private String image;
-    private String price;
+
+    private double price;
+    private String currency;
+
     @Column(name = "date_time")
-    private LocalDateTime dateTime;
-    private String location;
+    private LocalDate dateTime;
+
+    @ManyToOne
+    private Location location;
+
     private String link;
-
-    public Event() {}
-
-    public Event(UUID id, String title, String image, String price, LocalDateTime dateTime, String location, String link) {
-        this.id = id;
-        this.title = title;
-        this.image = image;
-        this.price = price;
-        this.dateTime = dateTime;
-        this.location = location;
-        this.link = link;
-    }
 
     public UUID getId() {
         return id;
@@ -57,28 +51,28 @@ public class Event {
         this.image = image;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public LocalDateTime getDateTime() {
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public LocalDate getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    public void setDateTime(LocalDate dateTime) {
         this.dateTime = dateTime;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public String getLink() {
@@ -87,5 +81,13 @@ public class Event {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }

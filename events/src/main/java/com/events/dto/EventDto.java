@@ -1,11 +1,16 @@
 package com.events.dto;
 
+import java.time.LocalDate;
+
 public class EventDto {
     private String title;
     private String image;
-    private String price;
-    private String date_time;
-    private String location;
+    private double price;
+    private String currency;
+    private LocalDate date_time;
+    private String country;
+    private String city;
+    private String address;
     private String link;
 
     public String getTitle() {
@@ -24,28 +29,52 @@ public class EventDto {
         this.image = image;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public String getDate_time() {
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public LocalDate getDate_time() {
         return date_time;
     }
 
-    public void setDate_time(String date_time) {
+    public void setDate_time(LocalDate date_time) {
         this.date_time = date_time;
     }
 
-    public String getLocation() {
-        return location;
+    public String getCountry() {
+        return country;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getLink() {

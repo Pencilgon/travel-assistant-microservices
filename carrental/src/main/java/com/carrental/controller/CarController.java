@@ -388,22 +388,32 @@ public class CarController {
     }
 
     // GET /rental/getall/cars — все машины
-    @GetMapping("/getall/cars")
-    public ResponseEntity<List<CarResponseDto>> getAllCars() {
-        List<Car> cars = carRepository.findAll();
-        List<CarResponseDto> response = cars.stream()
-                .map(CarResponseDto::new)
-                .toList();
-        return ResponseEntity.ok(response);
-    }
-
-    // GET /rental/get/cars?country=Kazakhstan&city=Almaty — по локации
     @GetMapping("/get/cars")
-    public ResponseEntity<List<CarResponseDto>> getCarsByLocation(@RequestParam String country, @RequestParam String city) {
-        List<Car> cars = carRepository.findByLocation_CountryAndLocation_City(country, city);
+    public ResponseEntity<List<CarResponseDto>> searchCars(
+            @RequestParam(required = false) String country,
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) Boolean available,
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String model
+    ) {
+        List<Car> cars = carRepository.findAll().stream()
+                .filter(car -> country == null || car.getLocation().getCountry().equalsIgnoreCase(country))
+                .filter(car -> city == null || car.getLocation().getCity().equalsIgnoreCase(city))
+                .filter(car -> minPrice == null || car.getPricePerDay() >= minPrice)
+                .filter(car -> maxPrice == null || car.getPricePerDay() <= maxPrice)
+                .filter(car -> available == null || car.isAvailable() == available)
+                .filter(car -> year == null || car.getYear() == year)
+                .filter(car -> brand == null || car.getBrand().equalsIgnoreCase(brand))
+                .filter(car -> model == null || car.getModel().equalsIgnoreCase(model))
+                .toList();
+
         List<CarResponseDto> response = cars.stream()
                 .map(CarResponseDto::new)
                 .toList();
+
         return ResponseEntity.ok(response);
     }
     @GetMapping("/locations/countries")
