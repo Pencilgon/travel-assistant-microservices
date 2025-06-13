@@ -1,5 +1,6 @@
 package com.carrental.repository;
 
+import com.carrental.entity.City;
 import com.carrental.entity.Location;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -8,6 +9,6 @@ import java.util.UUID;
 import java.util.List;
 
 public interface LocationRepository extends JpaRepository<Location, UUID> {
-    Optional<Location> findByCountryAndCity(String country, String city);
-    List<Location> findByCountry(String country);
+
+    Optional<Location> findByCityAndLatitudeAndLongitude(City city, Double latitude, Double longitude);
 }

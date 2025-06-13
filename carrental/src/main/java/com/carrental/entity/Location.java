@@ -8,14 +8,12 @@ import java.util.UUID;
 @Entity
 @Table(name = "locations")
 public class Location {
-    @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false)
-    private UUID id;
 
-    private String country;
-    private String city;
+    @Id
+    @GeneratedValue
+    private UUID id;
+    @ManyToOne
+    private City city;
     public Double latitude;
     public Double longitude;
 
@@ -27,19 +25,11 @@ public class Location {
         this.id = id;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
+    public City getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(City city) {
         this.city = city;
     }
 

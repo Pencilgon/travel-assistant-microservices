@@ -2,7 +2,7 @@ package com.events.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -20,10 +20,10 @@ public class Event {
     private String currency;
 
     @Column(name = "date_time")
-    private LocalDate dateTime;
+    private LocalDateTime dateTime;
 
     @ManyToOne
-    private Location location;
+    private Address address;
 
     private String link;
 
@@ -67,11 +67,11 @@ public class Event {
         this.currency = currency;
     }
 
-    public LocalDate getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDate dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -83,11 +83,11 @@ public class Event {
         this.link = link;
     }
 
-    public Location getLocation() {
-        return location;
+    public Address getAddress() {
+        return address;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }

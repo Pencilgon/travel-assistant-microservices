@@ -30,7 +30,7 @@ public class RentalRequestUserResponseDto {
     private String drivingLicenseUrl;
     private String selfieUrl;
 
-    public RentalRequestUserResponseDto(RentalRequest request) {
+    public RentalRequestUserResponseDto(RentalRequest request, UserProfileDto owner) {
         this.id = request.getId();
         this.carId = request.getCar().getId();
         this.carBrand = request.getCar().getBrand();
@@ -42,12 +42,14 @@ public class RentalRequestUserResponseDto {
                 .map(CarImage::getUrl)
                 .toList();
         this.carPricePerDay = request.getCar().getPricePerDay();
-        this.carCountry = request.getCar().getLocation().getCountry();
-        this.carCity = request.getCar().getLocation().getCity();
-        this.carOwnerLastName = request.getCar().getOwner().getLast_name();
-        this.carOwnerFirstName = request.getCar().getOwner().getFirst_name();
-        this.carOwnerEmail = request.getCar().getOwner().getEmail();
-        this.carOwnerPhoneNumber = request.getCar().getOwner().getPhone_number();
+
+        this.carCity = request.getCar().getLocation().getCity().getName();
+        this.carCountry = request.getCar().getLocation().getCity().getCountry().getName();
+
+        this.carOwnerFirstName   = owner.getFirstName();
+        this.carOwnerLastName    = owner.getLastName();
+        this.carOwnerEmail       = owner.getEmail();
+        this.carOwnerPhoneNumber = owner.getPhoneNumber();
         this.startDate = request.getStartDate();
         this.endDate = request.getEndDate();
         this.status = request.getStatus();

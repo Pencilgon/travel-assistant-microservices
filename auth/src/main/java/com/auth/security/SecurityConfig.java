@@ -33,6 +33,12 @@ public class SecurityConfig {
                 roleRepository.save(role);
                 System.out.println("Role 'USER' has been created");
             }
+            if (roleRepository.findByName("OWNER").isEmpty()) {
+                Role ownerRole = new Role();
+                ownerRole.setName("OWNER");
+                roleRepository.save(ownerRole);
+                System.out.println("Role 'OWNER' has been created");
+            }
         };
     }
     @Bean

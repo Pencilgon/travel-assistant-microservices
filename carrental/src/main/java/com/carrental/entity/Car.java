@@ -29,9 +29,7 @@ public class Car {
     @JoinColumn(name = "location_id")
     private Location location;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
-    private User owner;
+    private UUID ownerId;
     private boolean available = true;
 
     public boolean isAvailable() {
@@ -114,11 +112,11 @@ public class Car {
         this.location = location;
     }
 
-    public User getOwner() {
-        return owner;
+    public UUID getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setOwnerId(UUID ownerId) {
+        this.ownerId = ownerId;
     }
 }

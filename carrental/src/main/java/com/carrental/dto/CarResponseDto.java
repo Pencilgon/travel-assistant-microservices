@@ -27,7 +27,7 @@ public class CarResponseDto {
     private boolean available;
 
     // Конструктор для быстрого маппинга
-    public CarResponseDto(Car car) {
+    public CarResponseDto(Car car, UserProfileDto ownerInfo) {
         this.id = car.getId();
         this.brand = car.getBrand();
         this.model = car.getModel();
@@ -38,15 +38,18 @@ public class CarResponseDto {
                 .map(CarImage::getUrl)
                 .toList();
         this.pricePerDay = car.getPricePerDay();
-        this.country = car.getLocation().getCountry();
-        this.city = car.getLocation().getCity();
+
+        this.city = car.getLocation().getCity().getName();
+        this.country = car.getLocation().getCity().getCountry().getName();
+
         this.latitude = car.getLocation().getLatitude();
         this.longitude = car.getLocation().getLongitude();
-        this.ownerLastName = car.getOwner().getLast_name();
-        this.ownerFirstName = car.getOwner().getFirst_name();
-        this.ownerEmail = car.getOwner().getEmail();
-        this.ownerPhoneNumber = car.getOwner().getPhone_number();
-        this.available = car.isAvailable();
+
+        this.ownerFirstName   = ownerInfo.getFirstName();
+        this.ownerLastName    = ownerInfo.getLastName();
+        this.ownerEmail       = ownerInfo.getEmail();
+        this.ownerPhoneNumber = ownerInfo.getPhoneNumber();
+        this.available        = car.isAvailable();
     }
 
     // геттеры и сеттеры если нужны

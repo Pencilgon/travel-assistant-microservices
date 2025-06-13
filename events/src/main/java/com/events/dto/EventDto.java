@@ -1,13 +1,13 @@
 package com.events.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class EventDto {
     private String title;
     private String image;
     private double price;
     private String currency;
-    private LocalDate date_time;
+    private LocalDateTime date_time;
     private String country;
     private String city;
     private String address;
@@ -45,11 +45,11 @@ public class EventDto {
         this.currency = currency;
     }
 
-    public LocalDate getDate_time() {
+    public LocalDateTime getDate_time() {
         return date_time;
     }
 
-    public void setDate_time(LocalDate date_time) {
+    public void setDate_time(LocalDateTime date_time) {
         this.date_time = date_time;
     }
 

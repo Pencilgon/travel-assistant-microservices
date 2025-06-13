@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public interface RentalRequestRepository extends JpaRepository<RentalRequest, UUID> {
     List<RentalRequest> findByUserId(UUID userId);
-    List<RentalRequest> findByCar_Owner_Id(UUID ownerId);
     long countByUserIdAndStatusIn(UUID userId, List<String> statuses);
+
+    List<RentalRequest> findByCar_OwnerId(UUID ownerId);
 }
